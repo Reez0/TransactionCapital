@@ -1,0 +1,45 @@
+{% extends 'base_layout.html'%}
+{% block content%}
+        <div class="row">
+            <div class="col">
+                <div class="start text-center">
+                    <h1>How's the weather?</h1>
+                    <button id="provideAddress" class='btn btn-primary'>
+                        Let's find out...
+                    </button>
+                    
+                </div>
+            </div>
+        </div>
+{%endblock%}
+  <style>
+
+      body {
+          background-color: oldlace;
+      }
+
+      h1 {
+        font-family: 'Truculenta', sans-serif;
+      }
+
+      .start {
+          display:flex;
+          flex-direction: column;
+          align-items: center;
+          font-family: 'Inconsolata', sans-serif;
+      }
+
+      .start button {
+          width:300px;
+          border-radius:15px;
+          font-family: 'Barlow', sans-serif;
+          color: darkgrey;
+      }
+  </style>
+
+  <script>
+      $( "#provideAddress" ).click(() => {
+  alert( "Handler for .click() called." );
+});
+  </script>
+</html>
