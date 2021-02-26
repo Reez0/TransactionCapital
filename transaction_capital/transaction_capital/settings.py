@@ -25,8 +25,7 @@ SECRET_KEY = 'nyuhqgm^g7=p&nkjl7$qeq(h_j_57yawc1q-9fy#5-62ezfn01'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+CORS_ALLOW_ALL_ORIGINS = True
 
 # Application definition
 
@@ -38,10 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'weather'
+    'weather',
+    'corsheaders'
+
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -77,8 +79,12 @@ WSGI_APPLICATION = 'transaction_capital.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'transaction_capital_db',
+        'USER': 'root',
+        'PASSWORD': "pwd",
+        'HOST': 'localhost',
+        'PORT': "3306"
     }
 }
 
