@@ -1,3 +1,15 @@
-h1 {
+h1,h2,h3 {
     color: darkslategray;
+    font-family: 'Poppins', sans-serif;
 }
+
+p, a, button, input {
+    font-family: 'Nunito', sans-serif;
+}
+
+.panel {
+    border:2px solid lightgray;
+}
+
+/* font-family: 'Nunito', sans-serif;
+font-family: 'Poppins', sans-serif; */

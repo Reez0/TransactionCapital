@@ -1,45 +1,27 @@
 {% extends 'base_layout.html'%}
 {% block content%}
         <div class="row">
-            <div class="col">
-                <div class="start text-center">
-                    <h1>How's the weather?</h1>
-                    <button id="provideAddress" class='btn btn-primary'>
-                        Let's find out...
-                    </button>
-                    
+            <div class="col-6">
+                <div class="head">
+                    <h1>Weather App</h1>
+                    <div class="start">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="cityName" placeholder="Enter a city to get started...">
+                            <div class="input-group-append">
+                              <button class="btn btn-outline-secondary" type="button" id="citySubmit">Submit</button>
+                            </div>
+                          </div>
+                    </div>
+
                 </div>
             </div>
+
+        </div>
+        <div class="row panel">
+            <div class="col-12">
+                <p>Enter a city name to get weather forecasts</p>
+            </div>
+            
         </div>
 {%endblock%}
-  <style>
-
-      body {
-          background-color: oldlace;
-      }
-
-      h1 {
-        font-family: 'Truculenta', sans-serif;
-      }
-
-      .start {
-          display:flex;
-          flex-direction: column;
-          align-items: center;
-          font-family: 'Inconsolata', sans-serif;
-      }
-
-      .start button {
-          width:300px;
-          border-radius:15px;
-          font-family: 'Barlow', sans-serif;
-          color: darkgrey;
-      }
-  </style>
-
-  <script>
-      $( "#provideAddress" ).click(() => {
-  alert( "Handler for .click() called." );
-});
-  </script>
 </html>
