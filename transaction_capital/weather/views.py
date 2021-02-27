@@ -8,6 +8,8 @@ import json
 import requests
 from .models import APIKeys
 import urllib.parse
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 class WeatherView(TemplateView):
     def get(self, request):
@@ -16,15 +18,49 @@ class WeatherView(TemplateView):
 
 class WeatherData(APIView):
     def post(self, request):
-        open_weather_api_key = APIKeys.objects.get(key_name = 'openweathermap.org').key_value
-        map_box_api_key = APIKeys.objects.get(key_name = 'mapbox.com').key_value
-        mapbox_api = 'https://api.mapbox.com/geocoding/v5/mapbox.places/'
-        x = urllib.parse.quote_plus("37 Cookham Road, Johannesburg, Johannesburg, Gauteng 2092, South Africa")
-        print(x)
-        # searchTerm = request.data['city']
-        # response = requests.get(
-        #     'http://api.openweathermap.org/data/2.5/weather',
-        #     params={'q': searchTerm, 'appId': open_weather_api_key, "units": 'metric'}
-        # )
-        # print(response.json())
-        return Response({"success":True, "data":{"Name":"Riyaaz"}})
+        openweather_api_key = APIKeys.objects.get(key_name = 'openweathermap.org').key_value
+        mapbox_api_key = APIKeys.objects.get(key_name = 'mapbox.com').key_value
+        encoded_address = urllib.parse.quote_plus(request.data['address']) 
+        response = self.get_coordinates(encoded_address, mapbox_api_key)
+        coordinates = response['features'][0]['geometry']['coordinates']
+        current_weather = self.get_current_weather(coordinates, openweather_api_key)
+        weather_forecast = self.get_hourly_forecast(coordinates, openweather_api_key)
+        return Response({"success":True, "status": status.HTTP_200_OK, "data": {"current_weather": current_weather.json(), "weather_forecast": weather_forecast.json()}})
+
+    def get_coordinates(self, address, mapbox_api_key):
+        http = self.get_http_adapter()
+        mapbox_geotagging_api = 'https://api.mapbox.com/geocoding/v5/mapbox.places/'
+        response = http.get(
+            f"{mapbox_geotagging_api}{address}.json?access_token={mapbox_api_key}"
+        )
+        return response.json()
+
+    def get_current_weather(self, coordinates, openweather_api_key):
+        http = self.get_http_adapter()
+        response = http.get(
+            'http://api.openweathermap.org/data/2.5/weather',
+            params={'lat': coordinates[0], 'lon': coordinates[1], 'appId': openweather_api_key, "units": 'metric'}
+        )
+        return response
+
+    def get_hourly_forecast(self, coordinates, openweather_api_key):
+        http = self.get_http_adapter()
+        response = http.get(
+            'https://api.openweathermap.org/data/2.5/onecall',
+            params={'lat': coordinates[0], 'lon': coordinates[1], 'exclude': 'current,minutely,daily,alerts', 'appid': openweather_api_key, "units": 'metric'}
+        )
+        return response
+
+    def get_http_adapter(self):
+        retry_strategy = Retry(
+            total=3,
+            status_forcelist=[429, 500, 502, 503, 504],
+            method_whitelist=["HEAD", "GET", "OPTIONS"]
+        )
+        adapter = HTTPAdapter(max_retries=retry_strategy)
+        http = requests.Session()
+        http.mount("https://", adapter)
+        http.mount("http://", adapter)
+        return http
+
+    
