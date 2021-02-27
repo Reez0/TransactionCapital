@@ -1,9 +1,9 @@
 const apiUrl = 'http://localhost:8000/weather/'
 
-$("#citySubmit" ).click(() => {
-  let cityName = $("#cityName").val().trim();
-  if (cityName) {
-    let payload = {"city":cityName};
+$("#addressSubmit" ).click(() => {
+  let address = $("#address").val().trim();
+  if (address) {
+    let payload = {"address":address};
     let csrfToken = getCookie('csrftoken');
     $.ajax({
         url: apiUrl+'report',
