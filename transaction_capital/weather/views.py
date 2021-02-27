@@ -10,6 +10,7 @@ from .models import APIKeys
 import urllib.parse
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
+import datetime
 
 class WeatherView(TemplateView):
     def get(self, request):

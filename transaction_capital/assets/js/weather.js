@@ -1,5 +1,8 @@
 const apiUrl = 'http://localhost:8000/weather/'
 
+function fadeIn() {
+  $("#weather").fadeIn('slow');
+}
 $("#addressSubmit" ).click(() => {
   let address = $("#address").val().trim();
   if (address) {
@@ -14,7 +17,10 @@ $("#addressSubmit" ).click(() => {
         data: payload
       }).done((response) => {
         if (response.success) {
-            alert("Ok!")
+            fadeIn();
+            appendApiResponseValues(response);
+
+
         }
       }).fail((jqXHR, textStatus, errorThrown) =>{
         console.log("fail" + errorThrown);
@@ -36,3 +42,19 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+function appendApiResponseValues(response) {
+  const data = response.data.current_weather;
+  $("#location").text("LAT:"+ data.coord.lat +';'+ "LON:" +data.coord.lon);
+  $("#dayTime").text(getDateFromUnixTimestamp(data.dt))
+  $("#temp").text(data.main.temp+'°C')
+  $("#description").text(data.weather[0].description)
+  $("#windSpeed").text(data.wind.speed)
+  $("#humidity").text(data.main.humidity)
+}
+
+function getDateFromUnixTimestamp(unix_timestamp) {
+  let formattedTime = new Date(unix_timestamp * 1000);
+  return formattedTime.getHours() + ':' + formattedTime.getMinutes();
+}
+
