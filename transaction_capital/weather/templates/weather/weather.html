@@ -12,6 +12,11 @@
                             </div>
                           </div>
                     </div>
+                    <div class="save-history">
+                        <p>Would you like to add this search to your history?</p>
+                        <button class='btn btn-primary btn-sm'>Yes</button>
+                        <button class='btn btn-secondary btn-sm'>No</button>
+                    </div>
 
                 </div>
             </div>
@@ -19,44 +24,46 @@
         </div>
         <div style="display:none;" id ="weather" class="row">
             <div class="col">
+                <h2>Today's forecast</h2>
                 <div   class="card weather-card">
                     <div class="card-title m-3">
-                        <h1>Today's forecast</h1>
+                        <h1 id = "description"></h1>
                         <small id ="location"></small>
-                        <h3 id = "dayTime"></h3>
+                        
                     </div>
                     <div class="card-body">
                         <h1 id="temp"></h1>
-                        <img src="http://openweathermap.org/img/w/04d.png" alt="">
+                        <img id="weatherIndicator" alt="">
                     </div>
                     <div class="card-body-detail">
-                        <p id="windSpeed">Wind speed</p>
-                        <p id="humidity">Humidity</p>
+                        <p id="windSpeed"></p>
+                        <p id="humidity"></p>
                     </div>
-                    <hr>
     
                 </div>
             </div>
             <div class="col">
-                <div class="card weather-card">
-                    <div class="card-title">
-                        <p>Saturday, 20:39PM</p>
-                        <p>Scattered clouds</p>
-                    </div>
-                    <div class="card-body">
-                        <h1>20°C</h1>
-                        <img src="http://openweathermap.org/img/w/04d.png" alt="">
-                    </div>
-                    <div class="card-body-detail">
-                        <p>11km/h winds</p>
-                        <p>83% humidity</p>
-                    </div>
-                    <hr>
+                <h2>Hourly Weather Forecast</h2>
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                        </div>
+                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </div>
     
-                </div>
             </div>
 
             
         </div>
+        <div class="test-div">
+
+        </div>
+
 {%endblock%}
 </html>
