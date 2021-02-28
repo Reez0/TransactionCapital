@@ -1,21 +1,21 @@
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.views.generic import TemplateView, View
 from django.http import HttpResponse, HttpRequest
 import json
 import requests
-from .models import APIKeys
+from .models import APIKeys, Requests
 import urllib.parse
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import datetime
+from .serializers import HistorySerializer
 
 class WeatherView(TemplateView):
     def get(self, request):
         return render(request, 'weather/weather.html')
-
 
 class WeatherData(APIView):
     def post(self, request):
@@ -64,4 +64,20 @@ class WeatherData(APIView):
         http.mount("http://", adapter)
         return http
 
-    
+class History(APIView):
+    def get(self, request):
+        history = Requests.objects.all()
+        serializer = HistorySerializer(data=history, many=True)
+        # if serializer.is_valid:
+        #     return Response({"success":True, "status":status.HTTP_200_OK, "data":serializer.data})
+        # else:
+        #     return Response({"No":"No"})
+        return Response({"Okay": "OKay"})
+
+    def post(self, request):
+        serializer = HistorySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            return Response({'success':False,'message':'Unable to save history at this time, please try again later.'})  
+        return Response({'success': True, 'message':"History saved successfully"})

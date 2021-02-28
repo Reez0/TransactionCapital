@@ -1,8 +1,18 @@
 const apiUrl = "http://localhost:8000/weather/";
+var history = {};
+
+showSpinner = () => {
+  $(".spinner").show();
+};
+
+hideSpinner = () => {
+  $(".spinner").hide();
+};
 
 fadeIn = () => {
   $("#weather").fadeIn("slow");
 };
+
 $("#addressSubmit").click(() => {
   let address = $("#address").val().trim();
   if (address) {
@@ -13,6 +23,7 @@ $("#addressSubmit").click(() => {
       type: "POST",
       beforeSend: (xhr, settings) => {
         xhr.setRequestHeader("X-CSRFToken", csrfToken);
+        showSpinner();
       },
       data: payload,
     })
@@ -20,7 +31,12 @@ $("#addressSubmit").click(() => {
         if (response.success) {
           setCurrentWeather(response);
           setForecastWeather(response);
+          hideSpinner();
           fadeIn();
+          history.lastPayload = payload;
+          history.lastResponse = response;
+
+          $("#save-history").removeAttr("hidden");
         }
       })
       .fail((jqXHR, textStatus, errorThrown) => {
@@ -77,7 +93,6 @@ createForecastElementsDynamic = (data) => {
 };
 
 createHourlyForecastCard = (data, index) => {
-  console.log(data)
   let card = `
   <div class="carousel-item ${index == 0 ? "active" : ""}">
   <div class="card weather-card">
@@ -88,7 +103,7 @@ createHourlyForecastCard = (data, index) => {
           .trim()}</h2>
     </div>
     <div class="card-body">
-        <h1 id="temp">${Math.round(data.temp)+ "°C"}</h1>
+        <h1 id="temp">${Math.round(data.temp) + "°C"}</h1>
         <img id="weatherIndicator" src="http://openweathermap.org/img/w/${
           data.weather[0].icon
         }.png" alt="">
@@ -103,8 +118,34 @@ createHourlyForecastCard = (data, index) => {
   return card;
 };
 
-activeIndex = (index) => {
-  if (index == 0) {
-    return "active";
-  }
-};
+$("#noSaveHistory").click(() => {
+  $("#save-history").attr("hidden", true);
+});
+
+$("#saveHistory").click(() => {
+  console.log(history);
+  let payload = {
+    request_address: history.lastPayload.address,
+    request_response_data: JSON.stringify(history.lastResponse.data),
+  };
+  let csrfToken = getCookie("csrftoken");
+  $.ajax({
+    url: apiUrl + "history/create",
+    type: "POST",
+    beforeSend: (xhr, settings) => {
+      xhr.setRequestHeader("X-CSRFToken", csrfToken);
+      showSpinner();
+    },
+    data: payload,
+  })
+    .done((response) => {
+      if (response.success) {
+        hideSpinner();
+        swal("Success", "History updated successfully", "success");
+        $("#save-history").attr("hidden", true);
+      }
+    })
+    .fail((jqXHR, textStatus, errorThrown) => {
+      console.log(errorThrown);
+    });
+});
