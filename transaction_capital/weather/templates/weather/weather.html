@@ -2,7 +2,6 @@
 {% block content%}
         <div class="row">
             <div class="col-6">
-                <div class="head">
                     <h1>Weather App</h1>
                     <div class="start">
                         <div class="input-group mb-3">
@@ -12,12 +11,21 @@
                             </div>
                           </div>
                     </div>
-                    <div class="save-history">
-                        <p>Would you like to add this search to your history?</p>
-                        <button class='btn btn-primary btn-sm'>Yes</button>
-                        <button class='btn btn-secondary btn-sm'>No</button>
-                    </div>
-
+            </div>
+        </div>
+        <div hidden id="save-history" class="row">
+            <div class="col-12">
+                <div class="save-history m-2">
+                    <p>Would you like to add this search to your history?</p>
+                    <button id ="saveHistory" class='btn btn-primary btn-sm'>Yes</button>
+                    <button id="noSaveHistory" class='btn btn-secondary btn-sm'>No</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="view-history mb-5">
+                    <button class='btn btn-secondary'>View History</button>
                 </div>
             </div>
 
@@ -56,13 +64,12 @@
                           <span class="sr-only">Next</span>
                         </a>
                       </div>
-    
             </div>
-
-            
         </div>
-        <div class="test-div">
-
+        <div class="row">
+            <div class="col">
+                <h1>Weather History</h1>
+            </div>
         </div>
 
 {%endblock%}
