@@ -149,3 +149,52 @@ $("#saveHistory").click(() => {
       console.log(errorThrown);
     });
 });
+
+$("#viewHistory").click(() => {
+  let csrfToken = getCookie("csrftoken");
+  $.ajax({
+    url: apiUrl + "history",
+    type: "GET",
+    beforeSend: (xhr, settings) => {
+      xhr.setRequestHeader("X-CSRFToken", csrfToken);
+      showSpinner();
+    },
+  })
+    .done((response) => {
+      if (response.success) {
+        hideSpinner();
+        $("#weatherHistory").removeAttr("hidden");
+        response.data.map((item, index) => {
+          $("#historyAccordion").append(
+            createWeatherHistoryCard(item,index)
+          );
+        })
+      }
+    })
+    .fail((jqXHR, textStatus, errorThrown) => {
+      console.log(errorThrown);
+    });
+});
+
+createWeatherHistoryCard = (data, index) => {
+  let item = `
+  <div class="card">
+  <div class="card-header" id="heading-${index}">
+    <h2 class="mb-0">
+      <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-${index}" aria-expanded="true" aria-controls="collapse-${index}">
+        ${data.request_address}
+      </button>
+    </h2>
+    <small class="ml-3">${data.request_timestamp}</small>
+  </div>
+
+  <div id="collapse-${index}" class="collapse show" aria-labelledby="heading-${index}" data-parent="#historyAccordion">
+    <div class="card-body">
+     <code> 
+     ${data.request_response_data}
+     </code>
+    </div>
+  </div>
+  </div>`
+  return item
+}
