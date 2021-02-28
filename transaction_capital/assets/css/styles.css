@@ -31,6 +31,17 @@ p, a, button, input {
     justify-content: space-evenly;
 }
 
+.carousel-indicators li {
+    background-color: deepskyblue;
+}
+
+.weather-card {
+    min-height:275px;
+}
+
+.carousel-control-next-icon, .carousel-control-prev-icon {
+    background-color: deepskyblue;
+} 
 
 /* font-family: 'Nunito', sans-serif;
 font-family: 'Poppins', sans-serif; */
