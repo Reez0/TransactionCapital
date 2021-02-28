@@ -25,7 +25,7 @@
         <div class="row">
             <div class="col">
                 <div class="view-history mb-5">
-                    <button class='btn btn-secondary'>View History</button>
+                    <button id ="viewHistory" class='btn btn-secondary'>View History</button>
                 </div>
             </div>
 
@@ -66,11 +66,14 @@
                       </div>
             </div>
         </div>
-        <div class="row">
+        <div hidden id="weatherHistory" class="row">
             <div class="col">
                 <h1>Weather History</h1>
-            </div>
+                <div class="accordion" id="historyAccordion">
+
+                    </div>
         </div>
+        
 
 {%endblock%}
 </html>
