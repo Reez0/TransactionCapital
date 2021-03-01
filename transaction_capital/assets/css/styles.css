@@ -1,61 +1,115 @@
-h1,h2,h3, h4 {
-    color: darkslategray;
-    font-family: 'Poppins', sans-serif;
+h1,
+h2,
+h3,
+h4 {
+  color: darkslategray;
+  font-family: "Poppins", sans-serif;
 }
 
-p, a, button, input {
-    font-family: 'Nunito', sans-serif;
-    color: darkslategrey;
+p,
+a,
+button,
+input {
+  font-family: "Nunito", sans-serif;
+  color: darkslategrey;
+}
+
+.start {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.start input {
+  width: 50%;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid deepskyblue;
+}
+
+.save-history {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.card-heading {
+  text-align: center;
+  background-color: lightgray;
+}
+
+.history-card {
+  width: 50%;
+  margin: auto;
+}
+
+.options {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 20%;
+}
+
+.start button {
+  width: 30%;
+  border-radius: 15px;
 }
 
 .card-title {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
 .card-body {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-content: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-content: center;
 }
 
 .card-body-detail {
-    display: flex;
-    justify-content: space-evenly;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .main-weather {
-    display: flex;
-    justify-content: space-evenly;
+  display: flex;
+  justify-content: space-evenly;
 }
 
 .carousel-indicators li {
-    background-color: deepskyblue;
+  background-color: deepskyblue;
 }
 
 .weather-card {
-    min-height:275px;
+  min-height: 275px;
 }
 
 .spinner {
-    opacity:    0.5; 
-    background: #000; 
-    width:      100%;
-    height:     100%; 
-    z-index:    10;
-    top:        0; 
-    left:       0; 
-    position:   fixed; 
-    display: flex;
-    justify-content: center;
-    align-items: center;    
+  opacity: 0.5;
+  background: #000;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.carousel-control-next-icon, .carousel-control-prev-icon {
-    background-color: deepskyblue;
-} 
+#weatherHistory {
+    margin-top:2%;
+}
+
+.carousel-control-next-icon,
+.carousel-control-prev-icon {
+  background-color: deepskyblue;
+}
 
 /* font-family: 'Nunito', sans-serif;
 font-family: 'Poppins', sans-serif; */

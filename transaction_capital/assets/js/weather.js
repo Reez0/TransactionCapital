@@ -9,9 +9,17 @@ hideSpinner = () => {
   $(".spinner").hide();
 };
 
-fadeIn = () => {
-  $("#weather").fadeIn("slow");
+fadeIn = (element) => {
+  $(element).fadeIn("slow");
 };
+
+fadeOut = (element) => {
+  $(element).fadeOut("slow");
+};
+
+$("#searchAgain").click(() => {
+  fadeIn("#search");
+});
 
 $("#addressSubmit").click(() => {
   let address = $("#address").val().trim();
@@ -32,11 +40,15 @@ $("#addressSubmit").click(() => {
           setCurrentWeather(response);
           setForecastWeather(response);
           hideSpinner();
-          fadeIn();
+          fadeIn("#weather");
+          $("#viewHistory").removeAttr('hidden');
+          fadeOut("#search");
           history.lastPayload = payload;
           history.lastResponse = response;
-
           $("#save-history").removeAttr("hidden");
+        } else {
+          hideSpinner();
+          swal("Error", response.message, "error");
         }
       })
       .fail((jqXHR, textStatus, errorThrown) => {
@@ -62,7 +74,7 @@ getCookie = (name) => {
 
 setCurrentWeather = (response) => {
   const data = response.data.current_weather;
-  $("#location").text("LAT:" + data.coord.lat + ";" + "LON:" + data.coord.lon);
+  $("#location").text(`${data.name}, ${data.sys.country}`);
   $("#temp").text(Math.round(data.main.temp) + "°C");
   $("#description").text(data.weather[0].description);
   $("#windSpeed").text(data.wind.speed + "km/h winds");
@@ -119,11 +131,11 @@ createHourlyForecastCard = (data, index) => {
 };
 
 $("#noSaveHistory").click(() => {
-  $("#save-history").attr("hidden", true);
+  fadeOut("#save-history");
+  $("#searchAgain").attr("hidden", false);
 });
 
 $("#saveHistory").click(() => {
-  console.log(history);
   let payload = {
     request_address: history.lastPayload.address,
     request_response_data: JSON.stringify(history.lastResponse.data),
@@ -142,7 +154,8 @@ $("#saveHistory").click(() => {
       if (response.success) {
         hideSpinner();
         swal("Success", "History updated successfully", "success");
-        $("#save-history").attr("hidden", true);
+        fadeOut("#save-history");
+        $("#searchAgain").removeAttr("hidden");
       }
     })
     .fail((jqXHR, textStatus, errorThrown) => {
@@ -163,12 +176,14 @@ $("#viewHistory").click(() => {
     .done((response) => {
       if (response.success) {
         hideSpinner();
-        $("#weatherHistory").removeAttr("hidden");
+        if (response.data.length == 0) {
+          swal("No data", "You do not have any history saved", "info");
+          return
+        }
         response.data.map((item, index) => {
-          $("#historyAccordion").append(
-            createWeatherHistoryCard(item,index)
-          );
-        })
+          $("#historyAccordion").append(createWeatherHistoryCard(item, index));
+        });
+        $("#weatherHistory").removeAttr("hidden");
       }
     })
     .fail((jqXHR, textStatus, errorThrown) => {
@@ -188,13 +203,13 @@ createWeatherHistoryCard = (data, index) => {
     <small class="ml-3">${data.request_timestamp}</small>
   </div>
 
-  <div id="collapse-${index}" class="collapse show" aria-labelledby="heading-${index}" data-parent="#historyAccordion">
+  <div id="collapse-${index}" class="collapse" aria-labelledby="heading-${index}" data-parent="#historyAccordion">
     <div class="card-body">
      <code> 
      ${data.request_response_data}
      </code>
     </div>
   </div>
-  </div>`
-  return item
-}
+  </div>`;
+  return item;
+};
