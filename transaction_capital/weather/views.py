@@ -24,10 +24,10 @@ class WeatherData(APIView):
         openweather_api_key = APIKeys.objects.get(
             key_name='openweathermap.org').key_value
         mapbox_api_key = APIKeys.objects.get(key_name='mapbox.com').key_value
-        encoded_address = urllib.parse.quote_plus(request.data['address'])
+        encoded_address = urllib.parse.quote_plus(str(request.data['address']))
         response = self.get_coordinates(encoded_address, mapbox_api_key)
         if not response['features']:
-            return Response({"success":False,"status":status.HTTP_404_NOT_FOUND, "message":"Unable to retrieve weather data using this address. Please try again using a different address."})
+            return Response({"success": False, "status": status.HTTP_404_NOT_FOUND, "message": "Unable to retrieve weather data using this address. Please try again using a different address."})
         coordinates = response['features'][0]['geometry']['coordinates']
         current_weather = self.get_current_weather(
             coordinates, openweather_api_key)
