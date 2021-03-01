@@ -52,7 +52,8 @@ $("#addressSubmit").click(() => {
         }
       })
       .fail((jqXHR, textStatus, errorThrown) => {
-        console.log("fail" + errorThrown);
+        hideSpinner();
+        swal("Error", "An unexpected error occured. Please try again later.", "error");
       });
   }
 });
@@ -159,7 +160,9 @@ $("#saveHistory").click(() => {
       }
     })
     .fail((jqXHR, textStatus, errorThrown) => {
-      console.log(errorThrown);
+      hideSpinner();
+      swal("Error", "An unexpected error occured. Please try again later.", "error");
+
     });
 });
 
@@ -187,7 +190,9 @@ $("#viewHistory").click(() => {
       }
     })
     .fail((jqXHR, textStatus, errorThrown) => {
-      console.log(errorThrown);
+      hideSpinner();
+      swal("Error", "An unexpected error occured. Please try again later.", "error");
+
     });
 });
 
