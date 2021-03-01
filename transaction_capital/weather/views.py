@@ -21,9 +21,15 @@ class WeatherView(TemplateView):
 
 class WeatherData(APIView):
     def post(self, request):
+        if not APIKeys.objects.filter(key_name='openweathermap.org').exists():
+            return Response({"success": False, "message": "An API key was not provided for openweathermap.org", "status": status.HTTP_404_NOT_FOUND})
         openweather_api_key = APIKeys.objects.get(
             key_name='openweathermap.org').key_value
+        if not APIKeys.objects.filter(key_name='mapbox.com').exists():
+            return Response({"success": False, "message": "An API key was not provided for mapbox.com", "status": status.HTTP_404_NOT_FOUND})
+
         mapbox_api_key = APIKeys.objects.get(key_name='mapbox.com').key_value
+
         encoded_address = urllib.parse.quote_plus(str(request.data['address']))
         response = self.get_coordinates(encoded_address, mapbox_api_key)
         if not response['features']:
