@@ -26,6 +26,8 @@ class WeatherData(APIView):
         mapbox_api_key = APIKeys.objects.get(key_name='mapbox.com').key_value
         encoded_address = urllib.parse.quote_plus(request.data['address'])
         response = self.get_coordinates(encoded_address, mapbox_api_key)
+        if not response['features']:
+            return Response({"success":False,"status":status.HTTP_404_NOT_FOUND, "message":"Unable to retrieve weather data using this address. Please try again using a different address."})
         coordinates = response['features'][0]['geometry']['coordinates']
         current_weather = self.get_current_weather(
             coordinates, openweather_api_key)
@@ -39,13 +41,14 @@ class WeatherData(APIView):
         response = http.get(
             f"{mapbox_geotagging_api}{address}.json?access_token={mapbox_api_key}"
         )
+
         return response.json()
 
     def get_current_weather(self, coordinates, openweather_api_key):
         http = self.get_http_adapter()
         response = http.get(
             'http://api.openweathermap.org/data/2.5/weather',
-            params={'lat': coordinates[0], 'lon': coordinates[1],
+            params={'lat': coordinates[1], 'lon': coordinates[0],
                     'appId': openweather_api_key, "units": 'metric'}
         )
         return response
@@ -54,7 +57,7 @@ class WeatherData(APIView):
         http = self.get_http_adapter()
         response = http.get(
             'https://api.openweathermap.org/data/2.5/onecall',
-            params={'lat': coordinates[0], 'lon': coordinates[1],
+            params={'lat': coordinates[1], 'lon': coordinates[0],
                     'exclude': 'current,minutely,daily,alerts', 'appid': openweather_api_key, "units": 'metric'}
         )
         return response
